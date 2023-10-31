@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <title>JZ Airlines</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        td {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body bgcolor="#ddddff">
+
+    <h1>JZ Airlines</h1>
+    <div class="container" style="text-align: center; justify-content: center; align-items: center;">
+        <h2>Customer Login: <span id="loginError" style="color: red;"></span></h2>
+        <form action="http://localhost:40112/customer" method="post" style="text-align: center;">
+            <table border="1px solid black">
+                <tr>
+                    <td>Login:</td>
+                    <td><input type="text" name="login" required></td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type="password" name="password" required></td>
+                </tr>
+            </table>
+            <input type="submit" value="Login" style="margin-top: 10px; margin-left: 10px;">
+        </form>
+        <br>
+        <h1>OR</h1>
+        <h2>Register: <span id="registerError" style="color: red;"></span></h2>
+        </h2>
+        <form action="http://localhost:40112/customer" onsubmit="return validateForm();" method="post">
+            <table border="1px solid black">
+                <tr>
+                    <td>Name:</td>
+                    <td><input type="text" name="name" required></td>
+                </tr>
+                <tr>
+                    <td>Pick a login name:</td>
+                    <td><input type="text" name="login" required></td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type="password" name="password" id="password" required></td>
+                </tr>
+                <tr>
+                    <td>Password confirm:</td>
+                    <td><input type="password" name="passwordConfirm" id="confirmPassword" required></td>
+                </tr>
+            </table>
+            <input type="submit" value="Register" style="margin-top: 10px; margin-left: 10px;">
+            <p id="errorMsg" style="color: red;"></p>
+        </form>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const params = new URLSearchParams(window.location.search);
+            const loginError = params.get('loginError');
+            const registerError = params.get('registerError');
+
+            if (loginError) {
+                document.getElementById('loginError').textContent = decodeURIComponent(loginError.replace(/\+/g, ' '));
+            }
+
+            if (registerError) {
+                document.getElementById('registerError').textContent = decodeURIComponent(registerError.replace(/\+/g, ' '));
+            }
+        };
+
+        function validateForm() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            if (password !== confirmPassword) {
+                document.getElementById("registerError").textContent = "Passwords do not match!";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>
