@@ -112,10 +112,13 @@ public class CustomerServlet extends HttpServlet {
             System.out.println(login);
             System.out.println(listFlightsStatement);
             ResultSet rs = listFlightsStatement.executeQuery();
+            System.out.println(rs);
             if (!rs.next()) {
                 redirectToWelcomePage(response, login, "There are no current flights you are booked on.");
             } else {
-                rs.beforeFirst();
+
+                System.out.println("the control is in else block");
+                // rs.beforeFirst();
                 displayFlightsPage(rs, response);
             }
         } catch (SQLException e) {
@@ -232,7 +235,7 @@ public class CustomerServlet extends HttpServlet {
         out.println("<body bgcolor=\"#ddddff\">");
         out.println("<h1>Flight List</h1>");
         try {
-            if (!rs.isBeforeFirst()) {
+            if (!rs.next()) {
                 out.println("<p>There are no current flights you are booked on.</p>");
             } else {
                 out.println("<table border='1'>");

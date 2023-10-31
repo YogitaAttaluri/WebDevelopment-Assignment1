@@ -31,17 +31,21 @@ public class AdminServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
+        String providedUsername = request.getParameter("login");
+        String providedPassword = request.getParameter("password");
         String tableName = request.getParameter("tableName");
 
-        if (username == null) {
-            username = request.getParameter("login");
-            String password = request.getParameter("password");
-            if (username != null && password != null && username.equals("admin") && password.equals("123")) {
-                session.setAttribute("username", username);
+        if (providedUsername != null && providedPassword != null) {
+            if (providedUsername.equals("admin") && providedPassword.equals("123")) {
+                session.setAttribute("username", providedUsername);
             } else {
+                session.invalidate();
                 response.sendRedirect("/adminlogin.html?error=Login failed");
                 return;
             }
+        } else if (username == null) {
+            response.sendRedirect("/adminlogin.html?error=Login required");
+            return;
         }
 
         if (tableName == null) {
@@ -86,14 +90,12 @@ public class AdminServlet extends HttpServlet {
             StringBuilder htmlString = new StringBuilder();
             htmlString.append("<table border='1'>\n");
 
-            // Table Headers
             htmlString.append("<tr>");
             for (int i = 1; i <= numColumns; i++) {
                 htmlString.append("<th>").append(rsmd.getColumnName(i)).append("</th>");
             }
             htmlString.append("</tr>\n");
 
-            // Table Data
             while (rs.next()) {
                 htmlString.append("<tr>");
                 for (int i = 1; i <= numColumns; i++) {
